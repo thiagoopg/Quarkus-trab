@@ -37,5 +37,9 @@ public class AlunoService {
         Aluno Aluno = findById(id);
         repository.delete(String.valueOf(Aluno));
     }
+
+    public Object findAll() {
+        return repository.listAll();
+    }
 }
 

@@ -14,8 +14,8 @@ public class RespostaForm extends PanacheEntityBase {
     @JoinColumn(name = "id_form")
     private Formulario formulario;
 
-    @JoinColumn(name = "cpf_pessoa")
-    private Long alunoId;
+    @Column(name = "cpf_pessoa", length = 11)
+    private String alunoId;
 
     @Column(columnDefinition = "TEXT")
     private String resto;

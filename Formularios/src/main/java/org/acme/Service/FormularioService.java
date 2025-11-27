@@ -8,6 +8,7 @@ import org.acme.Entity.Formulario;
 import org.acme.Entity.RespostaForm;
 import org.acme.Repository.FormularioRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
@@ -17,10 +18,18 @@ public class FormularioService {
     FormularioRepository repository;
 
     @Transactional
-    public Formulario create(Formulario Formulario) {
-        repository.persist(Formulario);
-        return Formulario;
+    @Retry(maxRetries = 3, delay = 2000)
+    public Formulario create() {
+        Formulario formulario = new Formulario();
+
+        formulario.setDataAbertura(LocalDate.now());
+        formulario.setDataFechamento(LocalDate.now().plusDays(7)); // exemplo
+
+        repository.persist(formulario);
+
+        return formulario;
     }
+
 
     public List<Formulario> findAll() {
         return repository.listAll();

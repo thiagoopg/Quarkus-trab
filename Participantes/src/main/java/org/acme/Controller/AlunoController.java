@@ -30,6 +30,14 @@ public class AlunoController {
                 .findById(id))
                 .build();
     }
+    @GET
+    public Response findAll() {
+        var lista = service.findAll();
+
+        return Response.ok(lista).build();
+    }
+
+
 
     @PUT
     @Path("/{id}")

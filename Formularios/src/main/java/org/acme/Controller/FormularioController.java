@@ -7,6 +7,9 @@ import jakarta.ws.rs.core.Response;
 import org.acme.Entity.Formulario;
 import org.acme.Entity.RespostaForm;
 import org.acme.Service.FormularioService;
+import org.eclipse.microprofile.faulttolerance.Fallback;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.faulttolerance.Timeout;
 
 @Path("/Formularios")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -17,10 +20,20 @@ public class FormularioController {
     FormularioService service;
 
     @POST
-    public Response create(Formulario Formulario) {
-        Formulario entity = service.create(Formulario);
+    @Retry(maxRetries = 2, delay = 2000)
+    @Fallback(fallbackMethod = "mensagem")
+    @Timeout(3000)
+    public Response create() {
+        Formulario entity = service.create();
         return Response.status(Response.Status.CREATED)
                 .entity(entity)
+                .build();
+    }
+
+    @GET
+    public Response findAll() {
+        return Response.ok(service
+                        .findAll())
                 .build();
     }
 
@@ -54,6 +67,9 @@ public class FormularioController {
         return Response
                 .noContent()
                 .build();
+    }
+    public String mensagem() {
+        return "Erro na criação";
     }
 }
 
