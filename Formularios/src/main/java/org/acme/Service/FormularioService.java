@@ -4,9 +4,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
+import org.acme.DTO.PessoaDTO;
 import org.acme.Entity.Formulario;
+import org.acme.Entity.PessoaRestClient;
 import org.acme.Entity.RespostaForm;
 import org.acme.Repository.FormularioRepository;
+import org.acme.Repository.ResFormularioRepository;
+import org.eclipse.microprofile.faulttolerance.Retry;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +21,13 @@ public class FormularioService {
 
     @Inject
     FormularioRepository repository;
+
+    @Inject
+    ResFormularioRepository repositoryResposta;
+
+    @Inject
+    @RestClient
+    PessoaRestClient pessoaRestClient;
 
     @Transactional
     @Retry(maxRetries = 3, delay = 2000)
@@ -34,6 +46,7 @@ public class FormularioService {
     public List<Formulario> findAll() {
         return repository.listAll();
     }
+
     public Formulario findById(Long id) {
         return (Formulario) repository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Formulario não encontrada"));
@@ -48,10 +61,14 @@ public class FormularioService {
     }
 
     @Transactional
-    public List<RespostaForm> addResposta(Long id, RespostaForm resposta) {
+    public void addResposta(Long id, RespostaForm resposta, String idPessoa) {
         Formulario existente = findById(id);
+        PessoaDTO pessoa = pessoaRestClient.getPessoa(idPessoa);
+        resposta.setPessoa(pessoa);
+        resposta.setFormulario(existente);
         existente.getRespostas().add(resposta);
-        return existente.getRespostas();
+        repository.persist(existente);
+        repositoryResposta.persist(resposta);
     }
 
     @Transactional

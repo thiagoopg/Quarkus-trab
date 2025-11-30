@@ -52,11 +52,15 @@ public class FormularioController {
                         .updateDates(id, Formulario))
                 .build();
     }
-    @PUT
+    @POST
     @Path("/{id}/Resposta")
-    public Response AddResposta(@PathParam("id") Long id, RespostaForm RespostaForm) {
-        return Response.ok(service
-                        .addResposta(id, RespostaForm))
+    public Response AddResposta(
+            @PathParam("id") Long id,
+            RespostaForm RespostaForm,
+            @QueryParam("idPessoa") String idPessoa
+    ) {
+        service.addResposta(id, RespostaForm, idPessoa);
+        return Response.ok()
                 .build();
     }
 
@@ -68,8 +72,8 @@ public class FormularioController {
                 .noContent()
                 .build();
     }
-    public String mensagem() {
-        return "Erro na criação";
+    public Response mensagem() {
+        return Response.serverError().build();
     }
 }
 
