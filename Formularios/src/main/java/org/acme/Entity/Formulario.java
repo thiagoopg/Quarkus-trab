@@ -24,6 +24,4 @@ public class Formulario {
 
     @OneToMany(mappedBy = "formulario")
     private List<RespostaForm> respostas;
-
-    // getters e setters
 }

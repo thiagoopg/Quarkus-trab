@@ -9,8 +9,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @Path("/Pessoas")
 @RegisterRestClient(configKey = "pessoas-service")
 public interface PessoaRestClient {
-
     @GET
     @Path("/{id}")
-    PessoaDTO getPessoa(@PathParam("id") String id);  // PessoaDTO local
+    PessoaDTO getPessoa(@PathParam("id") String id);
 }

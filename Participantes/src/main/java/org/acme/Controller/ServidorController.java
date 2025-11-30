@@ -26,6 +26,7 @@ public class ServidorController {
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
         return Response.ok(service
                 .findById(id))
                 .build();
@@ -42,6 +43,7 @@ public class ServidorController {
     @PUT
     @Path("/{id}")
     public Response update(@PathParam("id") Long id, Servidor Servidor) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
         return Response.ok(service
                 .update(id, Servidor))
                 .build();
@@ -50,6 +52,7 @@ public class ServidorController {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
         service.delete(id);
         return Response
                 .noContent()

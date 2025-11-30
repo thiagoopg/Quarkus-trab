@@ -9,11 +9,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.acme.DTO.PessoaDTO;
 
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class RespostaForm extends PanacheEntityBase {
 
     @Id
@@ -24,11 +24,9 @@ public class RespostaForm extends PanacheEntityBase {
 
     @ManyToOne
     @JoinColumn(name = "id_form")
-    @JsonIgnore
+    @JsonIgnore //Ignorar Json
     private Formulario formulario;
 
     @Column(columnDefinition = "TEXT")
     private String resto;
-
-    // getters e setters
 }

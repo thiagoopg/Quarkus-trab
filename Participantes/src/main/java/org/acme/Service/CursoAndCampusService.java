@@ -8,9 +8,7 @@ import org.acme.Entity.Curso;
 @ApplicationScoped
 public class CursoAndCampusService {
 
-
     Campus repositoryCampus;
-
 
     Curso repositoryCurso;
 

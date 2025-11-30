@@ -20,16 +20,16 @@ public class PessoaService {
     }
 
     public Pessoa findById(Long id) {
-        return (Pessoa) repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Pessoa não encontrada"));
+        return repository.findById(id);
     }
 
     @Transactional
     public Pessoa update(Long id, Pessoa atualizado) {
-        Pessoa existente = findById(id);
-        existente.setNome(atualizado.getNome());
-        existente.setCpf(atualizado.getCpf());
-        return existente;
+        Pessoa pessoa = findById(id);
+        pessoa.setNome(atualizado.getNome());
+        pessoa.setCpf(atualizado.getCpf());
+        repository.persist(pessoa);
+        return pessoa;
     }
 
     @Transactional

@@ -20,16 +20,16 @@ public class ServidorService {
     }
 
     public Servidor findById(Long id) {
-        return (Servidor) repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Servidor não encontrada"));
+        return repository.findById(id);
     }
 
     @Transactional
     public Servidor update(Long id, Servidor atualizado) {
-        Servidor existente = findById(id);
-        existente.setNome(atualizado.getNome());
-        existente.setCpf(atualizado.getCpf());
-        return existente;
+        Servidor servidor = findById(id);
+        servidor.setNome(atualizado.getNome());
+        servidor.setCpf(atualizado.getCpf());
+        repository.persist(servidor);
+        return servidor;
     }
 
     @Transactional

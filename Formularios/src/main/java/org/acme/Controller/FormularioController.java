@@ -40,6 +40,8 @@ public class FormularioController {
     @GET
     @Path("/{id}")
     public Response findById(@PathParam("id") Long id) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
+
         return Response.ok(service
                         .findById(id))
                 .build();
@@ -48,17 +50,16 @@ public class FormularioController {
     @PUT
     @Path("/{id}/dates")
     public Response updateDates(@PathParam("id") Long id, Formulario Formulario) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
         return Response.ok(service
                         .updateDates(id, Formulario))
                 .build();
     }
     @POST
     @Path("/{id}/Resposta")
-    public Response AddResposta(
-            @PathParam("id") Long id,
-            RespostaForm RespostaForm,
-            @QueryParam("idPessoa") String idPessoa
+    public Response AddResposta(@PathParam("id") Long id, RespostaForm RespostaForm, @QueryParam("idPessoa") String idPessoa
     ) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
         service.addResposta(id, RespostaForm, idPessoa);
         return Response.ok()
                 .build();
@@ -67,6 +68,7 @@ public class FormularioController {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
+        if(service.findById(id) == null){return Response.status(Response.Status.NOT_FOUND).build();}
         service.delete(id);
         return Response
                 .noContent()

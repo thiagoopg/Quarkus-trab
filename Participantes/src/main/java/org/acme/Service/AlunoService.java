@@ -20,16 +20,16 @@ public class AlunoService {
     }
 
     public Aluno findById(Long id) {
-        return (Aluno) repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Aluno não encontrada"));
+        return repository.findById(id);
     }
 
     @Transactional
     public Aluno update(Long id, Aluno atualizado) {
-        Aluno existente = findById(id);
-        existente.setNome(atualizado.getNome());
-        existente.setCpf(atualizado.getCpf());
-        return existente;
+        Aluno aluno = findById(id);
+        aluno.setNome(atualizado.getNome());
+        aluno.setCpf(atualizado.getCpf());
+        repository.persist(aluno);
+        return aluno;
     }
 
     @Transactional

@@ -48,22 +48,23 @@ public class FormularioService {
     }
 
     public Formulario findById(Long id) {
-        return (Formulario) repository.findByIdOptional(id)
-                .orElseThrow(() -> new NotFoundException("Formulario não encontrada"));
+        return repository.findById(id);
     }
 
     @Transactional
     public Formulario updateDates(Long id, Formulario atualizado) {
-        Formulario existente = findById(id);
-        existente.setDataAbertura(atualizado.getDataAbertura());
-        existente.setDataFechamento(atualizado.getDataFechamento());
-        return existente;
+        Formulario formulario = findById(id);
+        formulario.setDataAbertura(atualizado.getDataAbertura());
+        formulario.setDataFechamento(atualizado.getDataFechamento());
+        repository.persist(formulario);
+        return formulario;
     }
 
     @Transactional
     public void addResposta(Long id, RespostaForm resposta, String idPessoa) {
         Formulario existente = findById(id);
         PessoaDTO pessoa = pessoaRestClient.getPessoa(idPessoa);
+        if(pessoa == null){throw new NotFoundException();}
         resposta.setPessoa(pessoa);
         resposta.setFormulario(existente);
         existente.getRespostas().add(resposta);

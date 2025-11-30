@@ -25,7 +25,7 @@ public class Curso extends PanacheEntityBase {
     private String nome;
 
     @ManyToOne
-    @JoinColumn(name = "id_campus")
+    @JoinColumn(name = "campus_id_campus")
     private Campus campus;
 
     // getters e setters
